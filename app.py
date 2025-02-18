@@ -2,25 +2,13 @@ from flask import Flask, request, abort
 import requests
 import os
 import logging
+
+# 設定 logging（記錄程式運行時的訊息）
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
 # 從環境變數讀取金鑰
-LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-
-@app.route("/webhook", methods=["POST"])
-from flask import Flask, request, abort
-import requests
-import os
-import logging
-
-# 設定 logging，這行要放在檔案最上面
-logging.basicConfig(level=logging.INFO)
-
-app = Flask(__name__)
-
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
@@ -73,7 +61,7 @@ def reply_to_line(reply_token, text):
         "messages": [{"type": "text", "text": text}]
     }
     response = requests.post("https://api.line.me/v2/bot/message/reply", headers=headers, json=data)
-    return response.status_code  # 回傳狀態碼，以便知道 LINE API 回覆是否成功
+    return response.status_code  # 回傳狀態碼，幫助確認 LINE API 是否成功
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
